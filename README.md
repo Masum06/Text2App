@@ -1,4 +1,6 @@
 # Text2App
+Description: *create an app with 2 buttons. when button1 pressed, say "Happy Text to App!". when button2 pressed, play video starwars.mp4 .*
+[![Text2App Live Creation of an app](http://img.youtube.com/vi/JtETeCqWX2U/0.jpg)](http://www.youtube.com/watch?v=YOUTUBE_VIDEO_ID_HERE "Text2App")
 Create a functional Android app from a given text description of the app. This model generates a MIT app inventor export file that should be uploaded to MIT app inventor website to build the app. 
 The current prototype supports 6 functionalities: 
 
