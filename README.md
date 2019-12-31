@@ -14,6 +14,16 @@ A user can describe an app functionality in Natural Language with these 6 functi
 ![Text2App Generation Pipeline](https://raw.githubusercontent.com/Masum06/Text2App/master/text2app_diagram.jpg)
 **Text2App Generation Pipeline**
 
-(c) Masum Hasan
+## How to Upload to MIT App Inventor cloud:
+
+* Visit http://ai2.appinventor.mit.edu/ and login with your Google Account.
+* Click *My Project* > *Import Project .aia from my computer*
+![Uploading to MIT App Inventor](https://raw.githubusercontent.com/Masum06/Text2App/master/app_inventor_upload.png)
+* Select the *.aia* file generated from **Text2App** 
+* Download *AI Companion* app for your Android Phone
+* Click *Connect* > *AI Conpanion* > Scan the QR Code with the MIT AI2 Companion app in your phone
+* Voila! You can now use the app
+
+(c) Masum Hasan, 2020
 
 Original project idea by: Dr. Zhijia Zhao
