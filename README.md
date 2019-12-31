@@ -1,7 +1,7 @@
 # Text2App
 **Description**: *create an app with 2 buttons. when button1 pressed, say "Happy Text to App!". when button2 pressed, play video starwars.mp4 .*
 
-**Text2App Demo**
+**Text2App Demo** (sound on)
 
 [![Text2App Live Creation of an app](http://img.youtube.com/vi/JtETeCqWX2U/0.jpg)](http://www.youtube.com/watch?v=JtETeCqWX2U "Text2App")
 
