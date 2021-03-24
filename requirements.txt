@@ -1,4 +1,4 @@
 OpenNMT-py
-transformers
-PyDictionary
-nltk
+transformers==4.4.2
+PyDictionary==1.5.1
+nltk==3.2.5
