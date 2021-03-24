@@ -1,0 +1,4 @@
+OpenNMT-py
+transformers
+PyDictionary
+nltk
