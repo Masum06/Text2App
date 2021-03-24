@@ -2,6 +2,7 @@ import nltk
 nltk.download('all')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from PyDictionary import PyDictionary
+import re
 
 class Text2App:
   NL = ""
