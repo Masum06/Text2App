@@ -1,14 +1,21 @@
-import nltk
+import nltk, re, subprocess
 nltk.download('all')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from PyDictionary import PyDictionary
-import re
 
 class Text2App:
   NL = ""
   SAR = ""
   literal_dict = {}
   best_model_dir = 'model_checkpoints/model_step_30000.pt'
+
+  def is_Number(self, test):
+    is_number = True
+    try:
+      float(test)
+    except ValueError:
+      is_number = False
+    return is_number
 
   def format_text(self, NL):
     NL = ' '.join(word_tokenize(NL))
@@ -27,7 +34,7 @@ class Text2App:
     numbers_list = []
     tokens = NL.split()
     for token in tokens:
-      if is_Number(token):
+      if self.is_Number(token):
         numbers_list.append(token)
     
     if len(numbers_list) != 0:
@@ -47,7 +54,7 @@ class Text2App:
 
     return NL, text_num_dict
 
-  def tranlsate(self, NL):
+  def translate(self, NL):
     nl_file = open("single_test.txt", "w")
     nl_file.write(NL)
     nl_file.close()
