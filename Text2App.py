@@ -18,7 +18,8 @@ class Text2App:
     return is_number
 
   def format_text(self, NL):
-    NL = ' '.join(word_tokenize(NL))
+    NL = ' '.join(word_tokenize(NL)).replace('`` ', '"').replace(" ''", '"').replace(" ' ", "' ")
+
     text_num_dict = {}
     NL = NL.replace("'", '"')
     strings_list = []
@@ -51,6 +52,8 @@ class Text2App:
     
     text_num_dict["random_player_source"] = "DanceMonkey.mp3"
     text_num_dict["random_video_player_source"] = "text2app_live.mp4"
+
+    
 
     return NL, text_num_dict
 
