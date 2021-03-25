@@ -553,7 +553,7 @@ def handle_ball(code_tokens, start_index, ball_number, bky, event):
   return bky, i, do_implicit_bounce, implicit_bounce_iter, implicit_bounce_ball_number
 
 def compile_scm_bky(tokens, screen_number, username="ksmehrab", project_name="test"):
-  vis_tokens = tokens[1:tokens.index("<end_comp>")]
+  vis_tokens = tokens[1:tokens.index("</complist>")]
   #print(vis_tokens)
 
   number_of_canvas = vis_tokens.count("<canvas>")
@@ -948,8 +948,8 @@ def enclose_with_canvas(SAR):
 
   canvas_comps = []
  
-  start_comp_idx = tokens.index("<start_comp>")
-  end_comp_idx = tokens.index("<end_comp>")
+  start_comp_idx = tokens.index("<complist>")
+  end_comp_idx = tokens.index("</complist>")
   for i in range (start_comp_idx, end_comp_idx):
     if tokens[i] in comps_inside_canvas:
       canvas_comps.append(tokens[i])
@@ -982,7 +982,7 @@ def sar_to_aia(original_SAR, text_num_dict, username="anonymuser", project_name=
   if os.path.exists('./myapp'):
     subprocess.call("rm -r myapp", shell=True)
 
-  #original_SAR = "<start_comp> <player> string6 </player> <switch> string1 </switch> <textbox> <video_player> string8 </video_player> <accelerometer> <switch> string3 </switch> <end_comp> <code> <switch1flipped> <video_player1> <stop> </video_player1> </switch1flipped> <accelerometer1shaken> <player1> <start> </player1> </accelerometer1shaken> </code>"
+  #original_SAR = "<complist> <player> string6 </player> <switch> string1 </switch> <textbox> <video_player> string8 </video_player> <accelerometer> <switch> string3 </switch> </complist> <code> <switch1flipped> <video_player1> <stop> </video_player1> </switch1flipped> <accelerometer1shaken> <player1> <start> </player1> </accelerometer1shaken> </code>"
   screen_number = 1
   if "<screen>" in original_SAR:
     SARs = original_SAR.split(" <screen> ")
