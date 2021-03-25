@@ -74,5 +74,5 @@ class Text2App:
     return sar
 
   def __init__(self, NL):
-    self.NL, self.literal_dict = self.format_text(NL)
-    self.SAR = self.translate(NL)
+    self.NL, self.literal_dict = self.format_text(NL.lower())
+    self.SAR = self.translate(self.NL)
