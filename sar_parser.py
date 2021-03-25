@@ -553,7 +553,7 @@ def handle_ball(code_tokens, start_index, ball_number, bky, event):
   return bky, i, do_implicit_bounce, implicit_bounce_iter, implicit_bounce_ball_number
 
 def compile_scm_bky(tokens, screen_number, username="ksmehrab", project_name="test"):
-  vis_tokens = tokens[1:tokens.index("</complist>")]
+  vis_tokens = tokens[1:tokens.index("<end_comp>")]
   #print(vis_tokens)
 
   number_of_canvas = vis_tokens.count("<canvas>")
@@ -904,27 +904,27 @@ $JSON
 
   #print("Final BKY:\n" + bky)
 
-  if not os.path.exists('myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name)):
-    os.makedirs('myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name))
+  if not os.path.exists('./myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name)):
+    os.makedirs('./myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name))
 
-  if not os.path.exists('myapp/youngandroidproject'):
-    os.makedirs('myapp/youngandroidproject')
+  if not os.path.exists('./myapp/youngandroidproject'):
+    os.makedirs('./myapp/youngandroidproject')
 
   if need_assets["<video_player>"]:
-    os.makedirs('myapp/assets')
+    os.makedirs('./myapp/assets')
     for vid_src_str in vid_src_list:
-      if os.path.exists("/content/drive/My Drive/assets/" + vid_src_str):
-        shutil.copy("/content/drive/My Drive/assets/" + vid_src_str, "/content/myapp/assets")
+      if os.path.exists("./Media/Videos/" + vid_src_str):
+        shutil.copy("./Media/Videos/" + vid_src_str, "./myapp/assets")
       else:
         #raise error
         print("Video Asset " + vid_src_str + " not found!")
       
   if need_assets["<player>"]:
-    if not os.path.exists('myapp/assets'):
-      os.makedirs('myapp/assets')
+    if not os.path.exists('./myapp/assets'):
+      os.makedirs('./myapp/assets')
     for player_src_str in player_src_list:
-      if os.path.exists("/content/drive/My Drive/assets/" + player_src_str):
-        shutil.copy("/content/drive/My Drive/assets/" + player_src_str, "/content/myapp/assets")
+      if os.path.exists("./Media/Music/" + player_src_str):
+        shutil.copy("./Media/Music/" + player_src_str, "./myapp/assets")
       else:
         #raise error
         print("Audio Asset " + player_src_str + " not found!")
@@ -948,8 +948,8 @@ def enclose_with_canvas(SAR):
 
   canvas_comps = []
  
-  start_comp_idx = tokens.index("<complist>")
-  end_comp_idx = tokens.index("</complist>")
+  start_comp_idx = tokens.index("<start_comp>")
+  end_comp_idx = tokens.index("<end_comp>")
   for i in range (start_comp_idx, end_comp_idx):
     if tokens[i] in comps_inside_canvas:
       canvas_comps.append(tokens[i])
@@ -982,7 +982,7 @@ def sar_to_aia(original_SAR, text_num_dict, username="anonymuser", project_name=
   if os.path.exists('./myapp'):
     subprocess.call("rm -r myapp", shell=True)
 
-  #original_SAR = "<complist> <player> string6 </player> <switch> string1 </switch> <textbox> <video_player> string8 </video_player> <accelerometer> <switch> string3 </switch> </complist> <code> <switch1flipped> <video_player1> <stop> </video_player1> </switch1flipped> <accelerometer1shaken> <player1> <start> </player1> </accelerometer1shaken> </code>"
+  #original_SAR = "<start_comp> <player> string6 </player> <switch> string1 </switch> <textbox> <video_player> string8 </video_player> <accelerometer> <switch> string3 </switch> <end_comp> <code> <switch1flipped> <video_player1> <stop> </video_player1> </switch1flipped> <accelerometer1shaken> <player1> <start> </player1> </accelerometer1shaken> </code>"
   screen_number = 1
   if "<screen>" in original_SAR:
     SARs = original_SAR.split(" <screen> ")

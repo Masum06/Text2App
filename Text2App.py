@@ -2,6 +2,9 @@ import nltk, re, subprocess
 nltk.download('all')
 from nltk.tokenize import sent_tokenize, word_tokenize
 from PyDictionary import PyDictionary
+import re
+import random
+import os
 
 class Text2App:
   NL = ""
@@ -50,8 +53,8 @@ class Text2App:
         key = comp + str(i)
         text_num_dict[key] = key
     
-    text_num_dict["random_player_source"] = "DanceMonkey.mp3"
-    text_num_dict["random_video_player_source"] = "text2app_live.mp4"
+    text_num_dict["random_player_source"] = random.choice(os.listdir("./Media/Music"))
+    text_num_dict["random_video_player_source"] = random.choice(os.listdir("./Media/Videos"))
 
     
 
