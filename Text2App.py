@@ -10,7 +10,7 @@ class Text2App:
   NL = ""
   SAR = ""
   literal_dict = {}
-  best_model_dir = 'model_checkpoints/model_step_30000.pt'
+  best_model_dir = 'model_checkpoints/model_step_12500.pt'
 
   def is_Number(self, test):
     is_number = True
