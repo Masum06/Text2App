@@ -1061,7 +1061,8 @@ def enclose_with_canvas(SAR):
 
   return modified_SAR
 
-def sar_to_aia(original_SAR, text_num_dict, username="anonymuser", project_name="test"):
+def sar_to_aia(t2a, username="anonymuser", project_name="test"):
+  original_SAR, text_num_dict = t2a.SAR, t2a.literal_dict
   global text_and_number_dict
   text_and_number_dict = text_num_dict
 
