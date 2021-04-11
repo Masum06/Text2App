@@ -6,6 +6,7 @@ import re
 import random
 import os
 from difflib import SequenceMatcher
+import numpy as np
 
 class Text2App:
   NL = ""
