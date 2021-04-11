@@ -5,6 +5,7 @@ from PyDictionary import PyDictionary
 import re
 import random
 import os
+from difflib import SequenceMatcher
 
 class Text2App:
   NL = ""
@@ -990,6 +991,16 @@ $JSON
 
   #print("Final BKY:\n" + bky)
 
+  def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
+  def get_most_similar(files, filename):
+    similarity_list = []
+    for f in files:
+      similarity_list.append(similar(f, filename))
+    similarity_list = np.array(similarity_list)
+    return files[similarity_list.argmax()]
+
   if not os.path.exists('./myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name)):
     os.makedirs('./myapp/src/appinventor/ai_{0}/{1}'.format(username, project_name))
 
@@ -999,11 +1010,15 @@ $JSON
   if need_assets["<video_player>"]:
     os.makedirs('./myapp/assets')
     for vid_src_str in vid_src_list:
+
       if os.path.exists("./Media/Videos/" + vid_src_str):
         shutil.copy("./Media/Videos/" + vid_src_str, "./myapp/assets")
       else:
         #raise error
-        print("Video Asset " + vid_src_str + " not found!")
+        available_vids = os.listdir("./Media/Videos/")
+        closest_vid = get_most_similar(available_vids, vid_src_str)
+        print("Video Asset " + vid_src_str + " not found! Fetching closest match:", closest_vid)
+        shutil.copy("./Media/Videos/" + closest_vid, "./myapp/assets")
       
   if need_assets["<player>"]:
     if not os.path.exists('./myapp/assets'):
@@ -1013,7 +1028,10 @@ $JSON
         shutil.copy("./Media/Music/" + player_src_str, "./myapp/assets")
       else:
         #raise error
-        print("Audio Asset " + player_src_str + " not found!")
+        available_music = os.listdir("./Media/Music/")
+        closest_music = get_most_similar(available_music, player_src_str)
+        print("Audio Asset " + player_src_str + " not found! Fetching closest match:", closest_music)
+        shutil.copy("./Media/Music/" + closest_music, "./myapp/assets")
 
   bky_file = open('./myapp/src/appinventor/ai_{0}/{1}/Screen{2}.bky'.format(username, project_name, str(screen_number)), 'w+')
   scm_file = open('./myapp/src/appinventor/ai_{0}/{1}/Screen{2}.scm'.format(username, project_name, str(screen_number)), 'w+')
