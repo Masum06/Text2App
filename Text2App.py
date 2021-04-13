@@ -7,6 +7,10 @@ import random
 import os
 from difflib import SequenceMatcher
 import numpy as np
+from bs4 import BeautifulSoup
+
+single_tokens = ['<green>', '<time1>', '<textboxtext2>', '<blue>', '<magenta>', '<time3>', '<timepicker>', '<time2>', '<textboxtext1>', '<passwordtextbox>', '<bounce>', '<text2speech>', '<start>', '<black>', '<ball>', '<red>', '<accelerometer>', '<yellow>', '<cyan>', '<orange>', '<pink>', '<light_gray>', '<gray>', '<dark_gray>', '<stop>', '<motion>', '<textboxtext3>', '<textbox>']
+
 
 class Text2App:
   NL = ""
@@ -74,6 +78,20 @@ class Text2App:
     subprocess.call('rm single_test.txt'.split())
     subprocess.call('rm sar_to_compile.txt'.split())
     return sar
+
+  def format_sar_xml(self):
+    global single_tokens
+    sar = "<SAR> "+self.SAR+" </SAR>"
+    for token in single_tokens:
+      if token in sar:
+        sar = sar.replace(token, token.replace(">", "/>"))
+    return sar
+
+  def prettyprint_sar(self):
+    x = format_sar_xml(self.SAR)
+    xml = BeautifulSoup(x, "xml").prettify()
+    xml = '\n'.join(xml.split('\n')[1:]).replace("/>", ">")
+    return xml
 
   def __init__(self, NL):
     self.NL, self.literal_dict = self.format_text(NL.lower())
