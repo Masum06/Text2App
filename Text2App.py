@@ -8,6 +8,8 @@ import os
 from difflib import SequenceMatcher
 import numpy as np
 from bs4 import BeautifulSoup
+import shutil
+import subprocess
 
 single_tokens = ['<green>', '<time1>', '<textboxtext2>', '<blue>', '<magenta>', '<time3>', '<timepicker>', '<time2>', '<textboxtext1>', '<passwordtextbox>', '<bounce>', '<text2speech>', '<start>', '<black>', '<ball>', '<red>', '<accelerometer>', '<yellow>', '<cyan>', '<orange>', '<pink>', '<light_gray>', '<gray>', '<dark_gray>', '<stop>', '<motion>', '<textboxtext3>', '<textbox>']
 
@@ -66,7 +68,7 @@ class Text2App:
 
     return NL, text_num_dict
 
-  def translate(self, NL):
+  def translate_pointer(self, NL):
     nl_file = open("single_test.txt", "w")
     nl_file.write(NL)
     nl_file.close()
@@ -93,9 +95,28 @@ class Text2App:
     xml = '\n'.join(xml.split('\n')[1:]).replace("/>", ">")
     return xml
 
-  def __init__(self, NL):
+  def __init__(self, NL, nlu='pointernet'):
     self.NL, self.literal_dict = self.format_text(NL.lower())
-    self.SAR = self.translate(self.NL)
+    if nlu=='pointernet':
+      self.SAR = self.translate_pointer(self.NL)
+
+    elif nlu=='roberta' or nlu=='codebert':
+      os.chdir('training_RoBERTa')
+      from model import *
+      if nlu=='roberta':
+        from model import *
+        args2.load_model_path='roberta.bin'
+      elif nlu =='codebert':
+        from model import *
+        args2.load_model_path='codebert.bin'
+
+      if not os.path.exists(args2.load_model_path):
+        subprocess.call(model_dict[args2.load_model_path].split())
+        
+      model.load_state_dict(torch.load(args2.load_model_path))
+      model.to(device)
+      os.chdir('..')
+
 
 
 
@@ -104,10 +125,6 @@ class Text2App:
 
 
 
-import re
-import os
-import shutil
-import subprocess
 
 """# Static Dictionaries"""
 
