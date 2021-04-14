@@ -91,7 +91,7 @@ class Text2App:
     return sar
 
   def prettyprint_sar(self):
-    x = format_sar_xml(self.SAR)
+    x = self.format_sar_xml()
     xml = BeautifulSoup(x, "xml").prettify()
     xml = '\n'.join(xml.split('\n')[1:]).replace("/>", ">")
     return xml
