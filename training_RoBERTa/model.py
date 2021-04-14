@@ -11,6 +11,32 @@ import subprocess
 import pickle
 import pandas as pd
 
+import sys
+import training_RoBERTa.bleu
+import pickle
+import torch
+import json
+import random
+import logging
+# import argparse
+import numpy as np
+import pandas as pd
+from io import open
+from itertools import cycle
+import torch.nn as nn
+# from model import Seq2Seq
+from tqdm import tqdm, trange
+from torch.utils.data import DataLoader, Dataset, SequentialSampler, RandomSampler,TensorDataset
+from torch.utils.data.distributed import DistributedSampler
+from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup,
+                          RobertaConfig, RobertaModel, RobertaTokenizer)
+MODEL_CLASSES = {'roberta': (RobertaConfig, RobertaModel, RobertaTokenizer)}
+
+logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
+                    datefmt = '%m/%d/%Y %H:%M:%S',
+                    level = logging.INFO)
+logger = logging.getLogger(__name__)
+
 class Seq2Seq(nn.Module):
     """
         Build Seqence-to-Sequence.
@@ -244,32 +270,7 @@ using a masked language modeling (MLM) loss.
 """
 
 
-import os
-import sys
-import bleu
-import pickle
-import torch
-import json
-import random
-import logging
-# import argparse
-import numpy as np
-import pandas as pd
-from io import open
-from itertools import cycle
-import torch.nn as nn
-# from model import Seq2Seq
-from tqdm import tqdm, trange
-from torch.utils.data import DataLoader, Dataset, SequentialSampler, RandomSampler,TensorDataset
-from torch.utils.data.distributed import DistributedSampler
-from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup,
-                          RobertaConfig, RobertaModel, RobertaTokenizer)
-MODEL_CLASSES = {'roberta': (RobertaConfig, RobertaModel, RobertaTokenizer)}
 
-logging.basicConfig(format = '%(asctime)s - %(levelname)s - %(name)s -   %(message)s',
-                    datefmt = '%m/%d/%Y %H:%M:%S',
-                    level = logging.INFO)
-logger = logging.getLogger(__name__)
 
 class Example(object):
     """A single training/test example."""
@@ -699,7 +700,7 @@ class MyTokenizer:
   token_to_id = {}
 
   def __init__(self):
-    infile = open('roberta_decoder.vocab','rb')
+    infile = open('training_RoBERTa/roberta_decoder.vocab','rb')
     self.vocab = pickle.load(infile)
     infile.close()
     self.vocab.sort()
@@ -740,9 +741,9 @@ class Arguments:
     pass
 
 
-output_dir="/gdrive/My Drive/text2app_models/RoBERTa/" # Colab + Drive
+output_dir="training_RoBERTa/" # Colab + Drive
 # output_dir="model/" # Local
-data_dir = '../synthesized_data/'
+data_dir = 'synthesized_data/'
 train_file=data_dir+'nl_sar_train.csv'
 dev_file=data_dir+'nl_sar_valid.csv'
 test_file=data_dir+'nl_sar_test.csv'
@@ -824,7 +825,7 @@ args2.encoder_tokenizer = tokenizer
 args2.decoder_tokenizer = decoder_tokenizer
 
 model_dict = {
-    'roberta.bin':'gdown https://drive.google.com/uc?id=1S38MsO5zfJW5ijYsS7JxR5Gg9MrXUuvZ',
-    'codebert.bin':'gdown https://drive.google.com/uc?id=12__l1gWhjGOUWVAlVNJS_mTN_vTgfmTW'
+    'roberta':'gdown https://drive.google.com/uc?id=1S38MsO5zfJW5ijYsS7JxR5Gg9MrXUuvZ',
+    'codebert':'gdown https://drive.google.com/uc?id=12__l1gWhjGOUWVAlVNJS_mTN_vTgfmTW'
 }
 

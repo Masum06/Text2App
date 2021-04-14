@@ -10,6 +10,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 import shutil
 import subprocess
+from training_RoBERTa.model import *
 
 single_tokens = ['<green>', '<time1>', '<textboxtext2>', '<blue>', '<magenta>', '<time3>', '<timepicker>', '<time2>', '<textboxtext1>', '<passwordtextbox>', '<bounce>', '<text2speech>', '<start>', '<black>', '<ball>', '<red>', '<accelerometer>', '<yellow>', '<cyan>', '<orange>', '<pink>', '<light_gray>', '<gray>', '<dark_gray>', '<stop>', '<motion>', '<textboxtext3>', '<textbox>']
 
@@ -101,21 +102,20 @@ class Text2App:
       self.SAR = self.translate_pointer(self.NL)
 
     elif nlu=='roberta' or nlu=='codebert':
-      os.chdir('training_RoBERTa')
-      from model import *
+      # os.chdir('training_RoBERTa')
       if nlu=='roberta':
-        from model import *
-        args2.load_model_path='roberta.bin'
+        args2.load_model_path='training_RoBERTa/roberta.bin'
       elif nlu =='codebert':
-        from model import *
-        args2.load_model_path='codebert.bin'
+        args2.load_model_path='training_RoBERTa/codebert.bin'
 
       if not os.path.exists(args2.load_model_path):
-        subprocess.call(model_dict[args2.load_model_path].split())
+        subprocess.call(model_dict[nlu].split())
+        shutil.move("{}.bin".format(nlu), "training_RoBERTa/{}.bin".format(nlu))
         
       model.load_state_dict(torch.load(args2.load_model_path))
       model.to(device)
-      os.chdir('..')
+      
+      self.SAR = get_sar(self.NL, model, args2)
 
 
 
