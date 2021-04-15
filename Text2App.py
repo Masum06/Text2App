@@ -1053,6 +1053,7 @@ $JSON
         #raise error
         available_vids = os.listdir("./Media/Videos/")
         closest_vid = get_most_similar(available_vids, vid_src_str)
+        scm = scm.replace("\"Source\":\""+vid_src_str+"\"", "\"Source\":\""+closest_vid+"\"")
         print("Video Asset " + vid_src_str + " not found! Fetching closest match:", closest_vid)
         shutil.copy("./Media/Videos/" + closest_vid, "./myapp/assets")
       
@@ -1066,6 +1067,7 @@ $JSON
         #raise error
         available_music = os.listdir("./Media/Music/")
         closest_music = get_most_similar(available_music, player_src_str)
+        scm = scm.replace("\"Source\":\""+player_src_str+"\"", "\"Source\":\""+closest_music+"\"")
         print("Audio Asset " + player_src_str + " not found! Fetching closest match:", closest_music)
         shutil.copy("./Media/Music/" + closest_music, "./myapp/assets")
 
