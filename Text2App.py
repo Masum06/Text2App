@@ -101,7 +101,7 @@ class Text2App:
     if nlu=='pointernet':
       self.SAR = self.translate_pointer(self.NL)
 
-    elif nlu=='roberta' or nlu=='codebert':
+    elif nlu in ('roberta', 'codebert'):
       # os.chdir('training_RoBERTa')
       if nlu=='roberta':
         args2.load_model_path='training_RoBERTa/roberta.bin'
@@ -462,7 +462,7 @@ def modify_vis_code(token, token_number, texts_dict, canvas_components):
   negative_uuid = neg_uuid_queue.pop(0)
   positive_uuid = pos_uuid_queue.pop(0)
   final_code = ""
-  if token == "<text2speech>" or token == "<accelerometer>" or token == "<datepicker>" or token == "<timepicker>" or token == "<passwordtextbox>":
+  if token in ('<text2speech>', '<accelerometer>', '<datepicker>', '<timepicker>', '<passwordtextbox>'):
     final_code = (generic_code.replace("<|number|>", str(token_number))).replace("<|negative_uuid|>" , str(negative_uuid))
   elif token == "<textbox>":
     final_code = (generic_code.replace("<|number|>", str(token_number))).replace("<|negativeuuid|>" , str(negative_uuid))  
@@ -498,9 +498,9 @@ def modifyLogicCode(token, token_number=None, method=None, text_or_number=None):
   if len(string_id_queue) == 0:
       generateStringID(20)
   string_id = string_id_queue.pop(0)
-  if token == "<button_click>" or token == "<switch_change>" or token == "<label>":
+  if token in ('<button_click>', '<switch_change>', '<label>'):
     code = code.replace("<|string_id|>", string_id).replace("<|number|>" , str(token_number))
-  elif token == "<text>" or token == "<number>":
+  elif token in ('<text>', '<number>'):
     code = code.replace("<|string_id|>", string_id).replace("<|text|>", str(text_or_number)).replace("<|number|>", str(text_or_number))
   elif token == "<text2speech>":
     code = code.replace("<|string_id|>" , string_id).replace("<|text2speech_number|>" , str(token_number))
@@ -514,15 +514,15 @@ def modifyLogicCode(token, token_number=None, method=None, text_or_number=None):
     code = code.replace("<|string_id|>" , string_id)
   elif token == "<ball_set_speed>":
     code = code.replace("<|string_id|>" , string_id).replace("<|ball_number|>" , str(token_number))
-  elif token == "<ball_get_speed>" or token == "<get_edge>":
+  elif token in ('<ball_get_speed>', '<get_edge>'):
     code = code.replace("<|string_id|>" , string_id)
-  elif token == "<ball_edge_reached>" or token == "<ball_bounce>" or token == "<ball_set_color>" or token == "<ball_set_radius>":
+  elif token in ('<ball_edge_reached>', '<ball_bounce>', '<ball_set_color>', '<ball_set_radius>'):
     code = code.replace("<|string_id|>" , string_id).replace("<|ball_number|>" , str(token_number))
   elif token == "color":
     code = code.replace("<|string_id|>", string_id)
   elif token == "<accelerometer1shaken>":
     code = code.replace("<|string_id|>", string_id)
-  elif token == "<start_stop_video>" or token == "<start_stop_player>":
+  elif token in ('<start_stop_video>', '<start_stop_player>'):
     #print("Method inside modify: " + method)
     code = code.replace("<|string_id|>", string_id).replace("<|number|>", str(token_number)).replace("<|method|>", method)
   elif token == "<Screen>":
@@ -573,7 +573,7 @@ def handle_ball(code_tokens, start_index, ball_number, bky, event):
   token = code_tokens[i]
   while token != ball_end:
     #print("  Ball token: " + token)
-    if token == "<motion>" or token == "<bounce>":
+    if token in ('<motion>', '<bounce>'):
       #set speed to 10
       #set direction to 10
       bky += modifyLogicCode("<ball_set_heading>", ball_number)
