@@ -2,7 +2,7 @@
 
 This is the official source code repository for our Paper _Text2App: A Framework for Creating Android Apps from Text Descriptions_
 
-**Demo website:** http://text2app.github.io/
+**Website:** http://text2app.github.io/
 
 **Paper:** https://arxiv.org/abs/2104.08301
 
