@@ -5,4 +5,8 @@ Create a functional Android app from a given text description of the app.
 
 **Demo website:** http://text2app.github.io/
 
-**Video:** https://youtu.be/Wr2TMuexkq8
+**Paper:** https://arxiv.org/abs/2104.08301
+
+**Video demonstration:** https://youtu.be/Wr2TMuexkq8
+
+**Try it on Colab!** https://colab.research.google.com/drive/1kSKg4-9_ZPrbAQ_7_zbD6AoYV-dEE3yV?usp=sharing
