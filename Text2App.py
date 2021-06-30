@@ -140,7 +140,9 @@ vis_comp_dict = {
     "<label>" : """{"$Name":"Label<|number|>","$Type":"Label","$Version":"5","Text":"<|label_text|>","Uuid":"<|positive_uuid|>"}""",
     "<datepicker>" : """"{"$Name":"DatePicker<|number|>","$Type":"DatePicker","$Version":"3","Text":"Choose a Date","Uuid":"<|negative_uuid|>"}""",
     "<timepicker>" : """{"$Name":"TimePicker<|number|>","$Type":"TimePicker","$Version":"3","Text":"Choose a Time","Uuid":"<|negative_uuid|>"}""",
-    "<passwordtextbox>" : """{"$Name":"PasswordTextBox<|number|>","$Type":"PasswordTextBox","$Version":"4","Uuid":"<|negative_uuid|>"}"""
+    "<passwordtextbox>" : """{"$Name":"PasswordTextBox<|number|>","$Type":"PasswordTextBox","$Version":"4","Uuid":"<|negative_uuid|>"}""",
+    "<image>" : """{"$Name":"Image<|number|>","$Type":"Image","$Version":"4","Uuid":"<|negative_uuid|>"}""",
+    "<camera>" : """{"$Name":"Camera<|number|>","$Type":"Camera","$Version":"3","Uuid":"<|negative_uuid|>"}"""
 }
 
 canvas_comp_dict = {
@@ -368,7 +370,37 @@ logic_dic = {
         <value name="VALUE">""",
 
       "</label>" : """</value>
-      </block>"""
+      </block>""",
+      
+      "<camera_capture>" : """<block type="component_method" id="<|string_id|>">
+        <mutation component_type="Camera" method_name="TakePicture" is_generic="false" instance_name="Camera1"></mutation>
+        <field name="COMPONENT_SELECTOR">Camera1</field>
+      </block>""",
+
+      "<camera_after_capture>" : """<block type="component_event" id="<|string_id|>" x="-518" y="-110">
+    <mutation component_type="Camera" is_generic="false" instance_name="Camera1" event_name="AfterPicture"></mutation>
+    <field name="COMPONENT_SELECTOR">Camera1</field>
+    <statement name="DO">""",
+
+      "</camera_after_capture>" : """</statement>
+  </block>""",
+
+      "<set_image>" : """<block type="component_set_get" id="<|string_id|>">
+        <mutation component_type="Image" set_or_get="set" property_name="Picture" is_generic="false" instance_name="Image<|number|>"></mutation>
+        <field name="COMPONENT_SELECTOR">Image<|number|></field>
+        <field name="PROP">Picture</field>
+        <value name="VALUE">""",
+
+      "</set_image>" : """</value>
+      </block>""",
+
+
+      "<get_camera_image>" : """<block type="lexical_variable_get" id="<|string_id|>">
+            <mutation>
+              <eventparam name="image"></eventparam>
+            </mutation>
+            <field name="VAR">image</field>
+          </block>"""
 
 }
 
@@ -462,7 +494,7 @@ def modify_vis_code(token, token_number, texts_dict, canvas_components):
   negative_uuid = neg_uuid_queue.pop(0)
   positive_uuid = pos_uuid_queue.pop(0)
   final_code = ""
-  if token in ('<text2speech>', '<accelerometer>', '<datepicker>', '<timepicker>', '<passwordtextbox>'):
+  if token in ('<text2speech>', '<accelerometer>', '<datepicker>', '<timepicker>', '<passwordtextbox>', '<image>', '<camera>'):
     final_code = (generic_code.replace("<|number|>", str(token_number))).replace("<|negative_uuid|>" , str(negative_uuid))
   elif token == "<textbox>":
     final_code = (generic_code.replace("<|number|>", str(token_number))).replace("<|negativeuuid|>" , str(negative_uuid))  
@@ -498,9 +530,9 @@ def modifyLogicCode(token, token_number=None, method=None, text_or_number=None):
   if len(string_id_queue) == 0:
       generateStringID(20)
   string_id = string_id_queue.pop(0)
-  if token in ('<button_click>', '<switch_change>', '<label>'):
+  if token == "<button_click>" or token == "<switch_change>" or token == "<label>" or token == "<camera_capture>" or token == "<camera_after_capture>" or token == "<set_image>" or token == "<get_camera_image>":
     code = code.replace("<|string_id|>", string_id).replace("<|number|>" , str(token_number))
-  elif token in ('<text>', '<number>'):
+  elif token == "<text>" or token == "<number>":
     code = code.replace("<|string_id|>", string_id).replace("<|text|>", str(text_or_number)).replace("<|number|>", str(text_or_number))
   elif token == "<text2speech>":
     code = code.replace("<|string_id|>" , string_id).replace("<|text2speech_number|>" , str(token_number))
@@ -514,15 +546,15 @@ def modifyLogicCode(token, token_number=None, method=None, text_or_number=None):
     code = code.replace("<|string_id|>" , string_id)
   elif token == "<ball_set_speed>":
     code = code.replace("<|string_id|>" , string_id).replace("<|ball_number|>" , str(token_number))
-  elif token in ('<ball_get_speed>', '<get_edge>'):
+  elif token == "<ball_get_speed>" or token == "<get_edge>":
     code = code.replace("<|string_id|>" , string_id)
-  elif token in ('<ball_edge_reached>', '<ball_bounce>', '<ball_set_color>', '<ball_set_radius>'):
+  elif token == "<ball_edge_reached>" or token == "<ball_bounce>" or token == "<ball_set_color>" or token == "<ball_set_radius>":
     code = code.replace("<|string_id|>" , string_id).replace("<|ball_number|>" , str(token_number))
   elif token == "color":
     code = code.replace("<|string_id|>", string_id)
   elif token == "<accelerometer1shaken>":
     code = code.replace("<|string_id|>", string_id)
-  elif token in ('<start_stop_video>', '<start_stop_player>'):
+  elif token == "<start_stop_video>" or token == "<start_stop_player>":
     #print("Method inside modify: " + method)
     code = code.replace("<|string_id|>", string_id).replace("<|number|>", str(token_number)).replace("<|method|>", method)
   elif token == "<Screen>":
@@ -541,7 +573,7 @@ def modifyLogicCode(token, token_number=None, method=None, text_or_number=None):
     code = code.replace("<|number|>", str(token_number))
 
   return code
-
+ 
 def is_Number(test):
   is_number = True
   try:
@@ -762,7 +794,9 @@ def compile_scm_bky(tokens, screen_number, username="ksmehrab", project_name="te
       "<label>": 0,
       "<datepicker>": 0,
       "<timepicker>": 0,
-      "<passwordtextbox>": 0
+      "<passwordtextbox>": 0,
+      "<camera>" : 0,
+      "<image>" : 0
   }
 
   #Generating vis comp code starts here
@@ -829,8 +863,15 @@ $JSON
     do_implicit_bounce = False
     implicit_bounce_iter = None
     implicit_bounce_ball_number = None
+    show_camera_image_flag1 = False
+    show_camera_image_flag2 = False
+    show_camera_image = False
     i = 0
     while (i < len(code_tokens)):
+      if code_tokens[i] == "<camera1>" or code_tokens[i] == "</camera1>":
+        i = i + 1
+        continue
+        #Implement this in a smarter way in your code 
       if do_implicit_bounce and (i == implicit_bounce_iter) and (implicit_bounce_ball_number != None):
         number = implicit_bounce_ball_number
         bky += modifyLogicCode("<ball_edge_reached>", number)
@@ -846,7 +887,25 @@ $JSON
 
         do_implicit_bounce = False
         implicit_bounce_iter = None
-        implicit_bounce_ball_number = None     
+        implicit_bounce_ball_number = None 
+     
+      if show_camera_image == True:
+        bky += modifyLogicCode("<camera_after_capture>", 1)
+        bky += "\n"
+        bky += modifyLogicCode("<set_image>", 1)
+        bky += "\n"
+        bky += modifyLogicCode("<get_camera_image>", 1)
+        bky += "\n"
+        bky += logic_dic["</set_image>"]
+        bky += "\n"
+        bky += logic_dic["</camera_after_capture>"]
+        bky += "\n"
+        show_camera_image = False
+      
+      if show_camera_image_flag1 == True:
+        show_camera_image_flag1 = False
+        show_camera_image = True
+      
 
       token = code_tokens[i]
 
@@ -857,6 +916,11 @@ $JSON
           button_number += 1
           bky += modifyLogicCode(token, button_number)
           bky += "\n"
+         
+        elif token == "<capture_and_show>":
+          bky += modifyLogicCode("<camera_capture>", 1)
+          bky += "\n"
+          show_camera_image_flag1 = True
 
         elif ball_regex.match(token) != None:
           br = ball_regex.match(token)
@@ -1079,8 +1143,29 @@ $JSON
 
   bky_file.close()
   scm_file.close()
+  
+def add_image_component(SAR):
+  tokens = SAR.split()
+  image_insert_index = tokens.index("<complist>") + 1
+  tokens.insert(image_insert_index, "<image>")
+  modified_sar = ""
+  for token in tokens:
+    modified_sar = modified_sar + token
+    modified_sar += " "
+  
+  if modified_sar[-1] == " ":
+    modified_sar = modified_sar[:-1]
 
-def enclose_with_canvas(SAR):
+  print(modified_sar)
+  
+  return modified_sar
+
+def modify_sar_for_compilation(SAR):
+  #Deal with auto addition of image if camera exists:
+  if "<camera>" in SAR:
+    SAR = add_image_component(SAR)
+  
+  #Deal with canvas:
   comps_inside_canvas = ["<ball>"]
   tokens = SAR.split()
 
@@ -1132,14 +1217,14 @@ def sar_to_aia(t2a, username="anonymuser", project_name="test"):
     for SAR in SARs:
       #modify SAR by enclosing with canvas if necessary
       #The necessity check is performed INSIDE the following function
-      SAR = enclose_with_canvas(SAR)
+      SAR = modify_sar_for_compilation(SAR)
       #print("Modified SAR with canvas: " + SAR)
       tokens = SAR.split()
       compile_scm_bky(tokens, screen_number, username, project_name)
       screen_number += 1
   else:
     SAR = original_SAR
-    SAR = enclose_with_canvas(SAR)
+    SAR = modify_sar_for_compilation(SAR)
     #print("Modified SAR with canvas: " + SAR)
     tokens = SAR.split()
     compile_scm_bky(tokens, 1, username, project_name)
