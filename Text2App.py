@@ -111,6 +111,7 @@ class Text2App:
       if not os.path.exists(args2.load_model_path):
         subprocess.call(model_dict[nlu].split())
         shutil.move("{}.bin".format(nlu), "training_RoBERTa/{}.bin".format(nlu))
+        print("Downloading model",nlu,"from Google Drive.")
         
       model.load_state_dict(torch.load(args2.load_model_path))
       model.to(device)
